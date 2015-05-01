@@ -19,7 +19,9 @@
         <p>
             Група: @Html.DropDownList("GroupId", ViewBag.Groups as SelectList, string.Empty)    
             Дисципліна: @Html.DropDownList("SubjectId", ViewBag.Subjects as SelectList, string.Empty)    
-            Вид контролю: @Html.DropDownList("ControlTypeId", ViewBag.ControlTypes as SelectList, string.Empty)    
+            Вид контролю: @Html.DropDownList("ControlTypeId", ViewBag.ControlTypes as SelectList, string.Empty)
+            <br />
+            ПІБ студента: @Html.TextBox("studentName", ViewBag.CurrentStudentName as string) 
             <input type="submit" value="Пошук" />
         </p>
     }
@@ -27,11 +29,8 @@
 <table>
     <tr>
         <th>
-            Назва документа            
-        </th>
-        <th>
-            Оцінка
-        </th>
+            Номер залікової
+        </th>        
         <th>
             Вид контролю
         </th>
@@ -42,7 +41,7 @@
             Викладач
         </th>
         <th>
-            Номер залікової
+            Оцінка
         </th>
         <th>
             Студент
@@ -56,11 +55,8 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Mark)
-        </td>
+            @Html.DisplayFor(modelItem => item.Student.RecordBookNumber)
+        </td>        
         <td>
             @Html.DisplayFor(modelItem => item.ControlType.Name)
         </td>
@@ -71,7 +67,7 @@
             @Html.DisplayFor(modelItem => item.Subject.Teacher.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Student.RecordBookNumber)
+            @Html.DisplayFor(modelItem => item.Mark)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Student.Name)
@@ -94,7 +90,9 @@
     new {page, 
         currentGroupId = ViewBag.CurrentGroupId, 
         currentSubjectId = ViewBag.CurrentSubjectId, 
-        currentControlTypeId = ViewBag.CurrentControlTypeId}))
+        currentControlTypeId = ViewBag.CurrentControlTypeId,
+        currentStudentName = ViewBag.CurrentStudentName
+    }))
 
 <p>@ViewBag.CurrentFilter</p>
 

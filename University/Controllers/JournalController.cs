@@ -18,7 +18,7 @@ namespace University.Controllers
         private int _pageSize = 10;
 
         private void SetViewBag(Student student = null, Subject subject = null, 
-            ControlType controlType = null, int? groupId = null)
+            ControlType controlType = null, int? groupId = null, string studentName = null)
         {
             ViewBag.Students = student == null
                 ? new SelectList(db.Students, "StudentId", "Name")
@@ -38,22 +38,25 @@ namespace University.Controllers
         // GET: /Journal/
 
         public ActionResult Index(int? page, int? groupId, int? subjectId, int? controlTypeId,
-            int? currentGroupId, int? currentSubjectId, int? currentControlTypeId)
+            int? currentGroupId, int? currentSubjectId, int? currentControlTypeId, string studentName,
+            string currentStudentName)
         {
             var journal = db.Journals.Include(j => j.Student)
                 .Include(j => j.Subject)
                 .Include(j => j.ControlType)
                 .Include(j => j.Student.Group);
-            if ((groupId != null) || (subjectId != null) || (controlTypeId != null))
+            if ((groupId != null) || (subjectId != null) || (controlTypeId != null) || (studentName != null))
             {
                 page = 1;
             }
             groupId = groupId ?? currentGroupId;
             subjectId = subjectId ?? currentSubjectId;
             controlTypeId = controlTypeId ?? currentControlTypeId;
+            studentName = studentName ?? currentStudentName;
             ViewBag.CurrentGroupId = groupId;
             ViewBag.CurrentSubjectId = subjectId;
             ViewBag.CurrentControlTypeId = controlTypeId;
+            ViewBag.CurrentStudentName = studentName;
             if (groupId != null)
             {
                 journal = journal.Where(j => j.Student.Group.GroupId == groupId);
@@ -66,10 +69,15 @@ namespace University.Controllers
             {
                 journal = journal.Where(j => j.ControlType.ControlTypeId == controlTypeId);
             }
+            if (!string.IsNullOrWhiteSpace(studentName))
+            {
+                journal = journal.Where(j => j.Student.Name.ToLower().Contains(studentName.ToLower()));
+            }
             SetViewBag(null,
                 db.Subjects.FirstOrDefault(s => s.SubjectId == currentSubjectId),
                 db.ControlTypes.FirstOrDefault(c => c.ControlTypeId == currentControlTypeId),
-                currentGroupId);
+                currentGroupId,
+                currentStudentName);
             return View(journal.OrderBy(j => j.Student.RecordBookNumber)
                 .ThenBy(j => j.Subject.Name)
                 .ThenBy(j => j.ControlType.Name)

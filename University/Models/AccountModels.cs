@@ -13,11 +13,8 @@ namespace University.Models
      //   public UsersContext()
         //    : base("RemoteConnection")
 
-public UsersContext()
-           : base("DefaultConnection")
-
-
-
+        public UsersContext()
+            : base("DefaultConnection")
         {
         }
 
@@ -68,6 +65,45 @@ public UsersContext()
                 surnames[r.Next(surnames.Count)],
                 names[r.Next(names.Count)],
                 middlenames[r.Next(middlenames.Count)]);
+        }
+
+        private string CreateRandomAddress()
+        {
+            var streets = new List<string>
+            {
+                "Петрова",
+                "Іванова",
+                "Героїв",
+                "Архімеда",
+                "Севастьянова",
+                "Луческу"
+            };
+            return string.Format("вул. {0}, буд. {1}, кв. {2}", streets[r.Next(streets.Count)],
+                r.Next(100), r.Next(150));
+        }
+
+        private string CreateRandomPhone()
+        {
+            return string.Format("{0}-{1}-{2}", r.Next(10, 100), r.Next(10, 100), r.Next(10, 100));
+        }
+
+        private string CreateRandomTeacherDegree()
+        {
+            var degrees = new List<string>
+            {
+                "Доцент",
+                "Старший науковий співробітник",
+                "Професор"
+            };
+            return degrees[r.Next(degrees.Count)];
+        }
+
+        private DateTime RandomDay()
+        {
+            var start = new DateTime(1980, 1, 1);
+
+            var range = (new DateTime(1990, 1, 1) - start).Days;
+            return start.AddDays(r.Next(range));
         }
 
         protected override void Seed(UsersContext context)
@@ -162,6 +198,10 @@ public UsersContext()
             }
             foreach (var teacher in teachers)
             {
+                teacher.AdrV = CreateRandomAddress();
+                teacher.DataV = RandomDay().ToShortDateString();
+                teacher.TelephoneVikl = CreateRandomPhone();
+                teacher.Zvaniya = CreateRandomTeacherDegree();
                 context.Teachers.Add(teacher);
             }
             foreach (var subject in subjects)
@@ -170,6 +210,10 @@ public UsersContext()
             }
             foreach (var student in students)
             {
+                student.Rik = r.Next(2012, 2015);
+                student.DataS = RandomDay().ToShortDateString();
+                student.AdrS = CreateRandomAddress();
+                student.TelephoneSt = CreateRandomPhone();
                 context.Students.Add(student);
             }
             context.SaveChanges();
@@ -205,6 +249,8 @@ public UsersContext()
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int GroupId { get; set; }
+
+        [Required]
         [DisplayName("Спеціалізація групи")]
         public string Specialization { get; set; }
     }
@@ -215,32 +261,35 @@ public UsersContext()
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int StudentId { get; set; }
+
+        [Required]
         [DisplayName("Номер залікової")]
         public long RecordBookNumber { get; set; }
 
+        [Required]
+        [DisplayName("Назва групи")]
         public int? GroupId { get; set; }
         [ForeignKey("GroupId")]
         public Group Group { get; set; }
 
+        [Required]
         [DisplayName("ПІБ студента")]
         public string Name { get; set; }
 
+        [Required]
         [DisplayName("Рік вступу")]
-        public string Rik { get; set; }
+        public int Rik { get; set; }
 
+        [Required]
         [DisplayName("Дата народження")]
         public string DataS { get; set; }
 
+        [Required]
         [DisplayName("Адреса проживання")]
         public string AdrS { get; set; }
 
-
         [DisplayName("Контактний телефон")]
         public string TelephoneSt { get; set; }
-
-
-
-
     }
 
     [Table("Teacher")]
@@ -249,15 +298,20 @@ public UsersContext()
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int TeacherId { get; set; }
+
+        [Required]
         [DisplayName("ПІБ викладача")]
         public string Name { get; set; }
 
+        [Required]
         [DisplayName("Вчене звання")]
         public string Zvaniya { get; set; }
 
+        [Required]
         [DisplayName("Дата народження")]
         public string DataV { get; set; }
 
+        [Required]
         [DisplayName("Адреса проживання")]
         public string AdrV { get; set; }
 
@@ -272,9 +326,13 @@ public UsersContext()
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int SubjectId { get; set; }
+
         [Required]
         [Display(Name = "Назва дисципліни")]
         public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Викладач")]
         public int? TeacherId { get; set; }
         [ForeignKey("TeacherId")]
         [DisplayName("Викладач")]
@@ -287,6 +345,8 @@ public UsersContext()
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ControlTypeId { get; set; }
+
+        [Required]
         [DisplayName("Назва виду контролю")]
         public string Name { get; set; }
     }
@@ -300,18 +360,25 @@ public UsersContext()
         [DisplayName("Найменування")]
         public string Name { get; set; }
         [DisplayName("Оцінка")]
+        [Required]
         public string Mark { get; set; }
 
+        [Required]
+        [DisplayName("Найменування контролю")] 
         public int? ControlTypeId { get; set; }
         [ForeignKey("ControlTypeId")]
-        [DisplayName("Найменування контролю")]
+        [DisplayName("Найменування контролю")]        
         public virtual ControlType ControlType { get; set; }
-       
+
+        [Required]
+        [DisplayName("Найменування дисципліни")] 
         public int? SubjectId { get; set; }
         [ForeignKey("SubjectId")]
-        [DisplayName("Найменування дисципліни")]
+        [DisplayName("Найменування дисципліни")]        
         public virtual Subject Subject { get; set; }
-
+        
+        [Required]
+        [DisplayName("ПІБ студента")]
         public int? StudentId { get; set; }
         [ForeignKey("StudentId")]
         [DisplayName("ПІБ студента")]

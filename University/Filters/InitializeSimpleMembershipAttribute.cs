@@ -41,7 +41,6 @@ namespace University.Filters
                   //  WebSecurity.InitializeDatabaseConnection("RemoteConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
                     WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
                     
-                    
                     if (!WebSecurity.UserExists("admin"))
                     {
                         WebSecurity.CreateUserAndAccount("admin", "admin");
