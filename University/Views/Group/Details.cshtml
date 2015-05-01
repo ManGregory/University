@@ -1,0 +1,24 @@
+﻿@model University.Models.Group
+
+@{
+    ViewBag.Title = "Перегляд групи";
+}
+
+<h2>Перегляд групи</h2>
+</br></br>
+<fieldset>
+    <legend>Група</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Specialization)
+    </div>
+    <div class="display-field">
+      <h7>  @Html.DisplayFor(model => model.Specialization)</h7>
+    </div></br>
+    
+    </br>
+</fieldset>
+<p>
+    @Html.ActionLink("Редагувати", "Edit", new { id=Model.GroupId }) |
+    @Html.ActionLink("До списку груп", "Index")
+</p>

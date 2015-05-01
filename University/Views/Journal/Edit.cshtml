@@ -1,0 +1,69 @@
+﻿@model University.Models.Journal
+
+@{
+    ViewBag.Title = "Редагувати оцінку";
+}
+
+<h2>Редагувати оцінку</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Оцінка</legend>
+
+        @Html.HiddenFor(model => model.JournalId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Mark)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Mark)
+            @Html.ValidationMessageFor(model => model.Mark)
+        </div>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ControlType.Name)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("ControlTypeId", ViewBag.ControlTypes as SelectList, String.Empty)
+            @Html.ValidationMessageFor(model => model.ControlTypeId)
+        </div>        
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Subject.Name)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("SubjectId", ViewBag.Subjects as SelectList, String.Empty)
+            @Html.ValidationMessageFor(model => model.SubjectId)
+        </div>       
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Student.Name)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("StudentId", ViewBag.Students as SelectList, String.Empty)
+            @Html.ValidationMessageFor(model => model.StudentId)
+        </div>
+
+        <p>
+            <input type="submit" value="Зберегти" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("До журналу", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

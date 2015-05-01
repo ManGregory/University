@@ -1,0 +1,25 @@
+﻿@model University.Models.ControlType
+
+@{
+    ViewBag.Title = "Перегляд виду контролю";
+}
+
+<h2>Перегляд виду контролю</h2>
+
+<fieldset>
+    <legend>Вид контролю</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+      <h7>  @Html.DisplayFor(model => model.Name)</h7>
+    </div>
+    </br>
+    </br></br>
+    </br>
+</fieldset>
+<p>
+    @Html.ActionLink("Редагувати", "Edit", new { id=Model.ControlTypeId }) |
+    @Html.ActionLink("До видів контролю", "Index")
+</p>

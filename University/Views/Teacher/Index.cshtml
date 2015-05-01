@@ -1,0 +1,79 @@
+﻿@model IEnumerable<University.Models.Teacher>
+
+@{
+    ViewBag.Title = "Список викладачів";
+}
+
+<p>
+<h2>Список викладачів</h2>
+
+ 
+<p>
+    @Html.ActionLink("Додати нового", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Zvaniya)
+        </th>
+         <th>
+            @Html.DisplayNameFor(model => model.DataV)
+        </th>
+
+         <th>
+            @Html.DisplayNameFor(model => model.AdrV)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.TelephoneVikl)
+        </th>
+
+        <th>
+
+        </th>
+
+
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Zvaniya)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.DataV)
+        </td>
+
+
+         <td>
+            @Html.DisplayFor(modelItem => item.AdrV)
+        </td>
+
+
+        <td>
+            @Html.DisplayFor(modelItem => item.TelephoneVikl)
+        </td>
+
+
+
+
+
+        <td>
+            @Html.ActionLink("Редагувати", "Edit", new { id=item.TeacherId }) |
+            @Html.ActionLink("Переглянути", "Details", new { id=item.TeacherId }) |
+            @Html.ActionLink("Видалити", "Delete", new { id=item.TeacherId })
+        </td>
+    </tr>
+}
+  
+
+</table>
+
+ </br></br>

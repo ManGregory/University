@@ -1,0 +1,93 @@
+﻿@model University.Models.Student
+
+@{
+    ViewBag.Title = "Додати студента";
+}
+
+<h2>Додати студента</h2>
+<div style="float: right; margin: 0 1em 1em 0;"><img src="../Images/orderedList4.png"width="750" height="440"></div>
+<div style="float: right; margin: 0 1em 1em 0;"><img src="../Images/orderedList9.png"></div>
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Студент</legend>
+
+        <div class="editor-label">
+           @Html.LabelFor(model => model.RecordBookNumber)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RecordBookNumber)
+            @Html.ValidationMessageFor(model => model.RecordBookNumber)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.Rik)
+        </div>
+          <div class="editor-field">
+            @Html.EditorFor(model => model.Rik)
+            @Html.ValidationMessageFor(model => model.Rik)
+        </div>
+
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.TelephoneSt)
+        </div>
+          <div class="editor-field">
+            @Html.EditorFor(model => model.TelephoneSt)
+            @Html.ValidationMessageFor(model => model.TelephoneSt)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DataS)
+        </div>
+          <div class="editor-field">
+            @Html.EditorFor(model => model.DataS)
+            @Html.ValidationMessageFor(model => model.DataS)
+        </div>
+
+
+<div class="editor-label">
+            @Html.LabelFor(model => model.AdrS)
+        </div>
+          <div class="editor-field">
+            @Html.EditorFor(model => model.AdrS)
+            @Html.ValidationMessageFor(model => model.AdrS)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Group.Specialization)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("GroupId", ViewBag.Groups as SelectList, String.Empty)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>    
+
+        <p>
+            <input type="submit" value="Зберегти" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("До списку студентів", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+</br></br>
+</br></br>
+</br></br>
+
+
+</br></br>

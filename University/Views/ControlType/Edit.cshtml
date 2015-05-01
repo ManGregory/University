@@ -1,0 +1,38 @@
+﻿@model University.Models.ControlType
+
+@{
+    ViewBag.Title = "Редагування виду контролю";
+}
+
+<h2>Редагування виду контролю</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Вид контролю</legend>
+
+        @Html.HiddenFor(model => model.ControlTypeId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <p>
+            <input type="submit" value="Зберегти" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("До видів контролю", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

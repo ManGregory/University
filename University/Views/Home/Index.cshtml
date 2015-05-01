@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Облік успішності студентів";
+}
+
+<h2>Інформація</h2>
+
+<div style="float: right; margin: 0 1em 1em 0;"><img src="../Images/orderedList8.png"></div> 
+
+<div style="float: right; margin: 0 1em 1em 0;"><img src="../Images/orderedList9.png"></div>
+
+
+<ol class="round">
+    <li class="two">
+      <h5></br>  <d>. . . . .  </d>  ❶  Для студентів</h5>
+            Для перегляду Журналу успішності </br>перейдіть на сторінку @Html.ActionLink("Оцінки", "Index", "Journal")
+    </li>
+
+    <li class="two">
+        <h5></br><d>. . . . .  </d> ❷ Для викладачів</h5>     
+           Для заповнення Журналу Вам необхідно @Html.ActionLink("увійти на сайт", "Login", "Account"). 
+      </br>Після авторизації на сайті Ви матимете можливість 
+        вносити та змінювати @Html.ActionLink("Оцінки", "Index", "Journal"), 
+            а також @Html.ActionLink("Види контролю", "Index", "ControlType").
+    </li>
+   
+    <li class="two">
+        <h5></br><d>. . . . .  </d> ❸ Для адміністратора</h5>
+            Ви й так повинні все знати
+    </li>
+    
+
+</ol>
+
+
+
+<div style="float: left; margin: 0 1em 1em 0;"><img src="../Images/bullet.png"></div>

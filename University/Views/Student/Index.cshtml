@@ -1,0 +1,96 @@
+﻿@model PagedList.IPagedList<University.Models.Student>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Список студентів";
+}
+
+<h2>Список студентів</h2>
+
+<p>
+    @Html.ActionLink("Додати студента", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            Номер залікової    
+        </th>
+        <th>
+            ПІБ  
+        </th>
+
+
+        <th>
+            Рік вступу  
+        </th>
+
+        <th>
+            Дата народження  
+        </th>
+
+        <th>
+            Адреса проживання 
+        </th>
+
+        <th>
+            Контактний телефон  
+        </th>
+
+        <th>
+            Група
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecordBookNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+
+             <td>
+                @Html.DisplayFor(modelItem => item.Rik)
+            </td>
+
+             <td>
+                @Html.DisplayFor(modelItem => item.DataS)
+            </td>
+
+             <td>
+                @Html.DisplayFor(modelItem => item.AdrS)
+            </td>
+
+
+             <td>
+                @Html.DisplayFor(modelItem => item.TelephoneSt)
+            </td>
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Group.Specialization)
+            </td>
+
+
+
+            <td>
+                @Html.ActionLink("Редагувати", "Edit", new { id=item.StudentId }) |
+                @Html.ActionLink("Переглянути", "Details", new { id=item.StudentId }) |
+                @Html.ActionLink("Видалити", "Delete", new { id=item.StudentId })
+            </td>
+        </tr>
+    }
+    
+</table>
+<br/>
+
+
+
+
+Сторінка @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) з @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new {page}))
+
+

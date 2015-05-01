@@ -1,0 +1,29 @@
+﻿@model University.Models.Subject
+
+@{
+    ViewBag.Title = "Перегляд дисципліни";
+}
+
+<h2>Перегляд дисципліни</h2>
+
+<fieldset>
+    <legend>Дисципліна</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+      <h7>  @Html.DisplayFor(model => model.Name)</h7>
+    </div>
+    
+    <div class="editor-label">
+        @Html.DisplayNameFor(model => model.Teacher.Name)
+    </div>
+    <div class="editor-field">
+     <h7>   @Html.DisplayFor(model => model.Teacher.Name)</h7>
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Редагувати", "Edit", new { id=Model.SubjectId }) |
+    @Html.ActionLink("До списку дисциплін", "Index")
+</p>

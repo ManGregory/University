@@ -1,0 +1,31 @@
+﻿@model University.Models.LocalPasswordModel
+@{
+    ViewBag.Title = "Управління акаунтом";
+}
+<div style="float: right; margin: 0 1em 1em 0;"><img src="../Images/orderedList3.png"></div>
+<hgroup class="title">
+    <h2>@ViewBag.Title</h2>
+</hgroup>
+
+<p class="message-success">@ViewBag.StatusMessage</p>
+
+<p>Ви увійшли як <strong>@User.Identity.Name</strong>.</p>
+
+<p><h10>₪</h10> <h7>Викладач</h7> та <h7>Адміністратор</h7> мають можливість:</p> 
+
+<p>переглядати результати студентів  усіх/однієї  Групи  з  усіх/заданих Дисциплін   та  з усіх/заданих   Видів  контролю.
+    <p><h10>₪ </h10><h7>Викладач</h7> також може: додавати/редагувати/видаляти <h8>Оцінки</h8>  та  <h8>Види контролю</h8>.</p>
+
+ <p><h10>₪ </h10><h7>Адміністратор</h7> також може: </p>
+     <p>    додавати/редагувати/видаляти  <h8>Оцінки, Дисципліну, Викладача, Студента, Групу</h8> та <h8>Види контролю</h8>.</p>
+
+<p><h10>₪ </h10>Для повернення натисніть посилання "Домашня сторінка" <h9> ☺ </h9></p>
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

@@ -1,0 +1,65 @@
+﻿@model University.Models.Student
+
+@{
+    ViewBag.Title = "Перегляд студента";
+}
+
+<h2>Інформація про студента</h2>
+
+<fieldset>
+    <legend>Студента</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.RecordBookNumber)
+    </div>
+    <div class="display-field">
+      <h7>  @Html.DisplayFor(model => model.RecordBookNumber)</h7>
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+       <h7> @Html.DisplayFor(model => model.Name)</h7>
+    </div>
+    
+
+
+<div class="display-label">
+         @Html.DisplayNameFor(model => model.Rik)
+    </div>
+    <div class="display-field">
+      <h7>  @Html.DisplayFor(model => model.Rik)</h7>
+    </div>
+
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.DataS)
+    </div>
+    <div class="display-field">
+     <h7>   @Html.DisplayFor(model => model.DataS)</h7>
+    </div>
+
+
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AdrS)
+    </div>
+    <div class="display-field">
+     <h7>   @Html.DisplayFor(model => model.AdrS)</h7>
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TelephoneSt)
+    </div>
+    <div class="display-field">
+      <h7>  @Html.DisplayFor(model => model.TelephoneSt)</h7>
+    </div>
+
+
+
+</fieldset>
+<p>
+    @Html.ActionLink("Редагувати", "Edit", new { id=Model.StudentId }) |
+    @Html.ActionLink("До списку студентів", "Index")
+</p>

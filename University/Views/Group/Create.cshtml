@@ -1,0 +1,39 @@
+﻿@model University.Models.Group
+
+@{
+    ViewBag.Title = "Додати нову групу";
+}
+
+<div style="float: right; margin: 0 1em 1em 0;"><img src="../Images/bullet.png"></div>
+
+<h2>Додати нову групу</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Група</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Specialization)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Specialization)
+            @Html.ValidationMessageFor(model => model.Specialization)
+        </div>
+
+        <p>
+            <input type="submit" value="Додати" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("До списку груп", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+  

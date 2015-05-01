@@ -1,0 +1,69 @@
+﻿@model University.Models.Journal
+
+@{
+    ViewBag.Title = "Видалення оцінки";
+}
+
+<h2>Видалення</h2>
+
+
+<h3>Ви впевненні, що хочете видалити цей запис?</h3>
+<fieldset>
+    <legend>Журнал успішності</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+     <h7>   @Html.DisplayFor(model => model.Name)</h7>
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Mark)
+    </div>
+    <div class="display-field">
+     <h7>   @Html.DisplayFor(model => model.Mark)</h7>
+    </div>
+    
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ControlType.Name)
+    </div>
+    <div class="display-field">
+      <h7>  @Html.DisplayFor(model => model.ControlType.Name)</h7>
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Subject.Name)
+    </div>
+    <div class="display-field">
+    <h7>    @Html.DisplayFor(model => model.Subject.Name)</h7>
+    </div>
+    
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Subject.Teacher.Name)
+    </div>
+    <div class="display-field">
+     <h7>   @Html.DisplayFor(model => model.Subject.Teacher.Name)</h7>
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Student.Name)
+    </div>
+    <div class="display-field">
+     <h7>   @Html.DisplayFor(model => model.Student.Name)</h7>
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Student.Group.Specialization)
+    </div>
+    <div class="display-field">
+     <h7>   @Html.DisplayFor(model => model.Student.Group.Specialization)</h7>
+    </div>
+    
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Видалити" /> |
+        @Html.ActionLink("До журналу", "Index")
+    </p>
+}

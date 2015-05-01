@@ -1,0 +1,42 @@
+﻿@model University.Models.Student
+
+@{
+    ViewBag.Title = "Видалити студента";
+}
+
+<h2>Видалити студента</h2>
+
+
+
+<h3>Ви впевненні що хочете видалити цей запис?</h3>
+<fieldset> 
+    <legend>Студент</legend>
+     <ol> </br> </br></br>
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.RecordBookNumber)
+    </br> 
+    </div>
+    <div class="display-field">
+     <h7>   @Html.DisplayFor(model => model.RecordBookNumber)</h7>
+    </br> 
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </br> </br>
+    </div>
+    <div class="display-field">
+     <h7>   @Html.DisplayFor(model => model.Name)</h7>
+    </div>
+
+    </br> </br></br>
+  </ol>
+</fieldset>
+    
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Видалити" /> |
+        @Html.ActionLink("До списку студентів", "Index")
+    </p>
+}
+ 

@@ -1,0 +1,25 @@
+﻿@model University.Models.Group
+
+@{
+    ViewBag.Title = "Видалити групу";
+}
+
+<h2>Видалити групу</h2>
+
+<h3>Ви впевненні, що хочете видалити цей запис?</h3>
+<fieldset>
+    <legend>Група</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Specialization)
+    </div>
+    <div class="display-field">
+     <h7>   @Html.DisplayFor(model => model.Specialization)</h7>
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Видалити" /> |
+        @Html.ActionLink("До списку груп", "Index")
+    </p>
+}

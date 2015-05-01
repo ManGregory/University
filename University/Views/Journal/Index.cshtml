@@ -1,0 +1,100 @@
+﻿@model PagedList.IPagedList<University.Models.Journal>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Журнал успішності студентів";
+}
+
+
+
+<h2>Журнал успішності студентів</h2>
+
+<p>
+    @if ((User.Identity.Name == "admin") || (User.Identity.Name == "teacher"))
+    {
+        @Html.ActionLink("Додати нову оцінку", "Create", new {page = Model.PageNumber} )
+    }
+    @using (Html.BeginForm("Index", "Journal", FormMethod.Get))
+    {
+        <p>
+            Група: @Html.DropDownList("GroupId", ViewBag.Groups as SelectList, string.Empty)    
+            Дисципліна: @Html.DropDownList("SubjectId", ViewBag.Subjects as SelectList, string.Empty)    
+            Вид контролю: @Html.DropDownList("ControlTypeId", ViewBag.ControlTypes as SelectList, string.Empty)    
+            <input type="submit" value="Пошук" />
+        </p>
+    }
+</p>
+<table>
+    <tr>
+        <th>
+            Назва документа            
+        </th>
+        <th>
+            Оцінка
+        </th>
+        <th>
+            Вид контролю
+        </th>
+        <th>
+            Дисципліна
+        </th>
+        <th>
+            Викладач
+        </th>
+        <th>
+            Номер залікової
+        </th>
+        <th>
+            Студент
+        </th>
+        <th>
+            Група
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mark)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ControlType.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Subject.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Subject.Teacher.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Student.RecordBookNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Student.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Student.Group.Specialization)
+        </td>
+        <td>
+            @Html.ActionLink("Редагувати", "Edit", new { id=item.JournalId, page = Model.PageNumber }) |
+            @Html.ActionLink("Переглянути", "Details", new { id=item.JournalId, page = Model.PageNumber }) |
+            @Html.ActionLink("Видалити", "Delete", new { id=item.JournalId, page = Model.PageNumber })
+        </td>
+    </tr>
+}
+
+</table>
+Сторінка @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) з @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", 
+    new {page, 
+        currentGroupId = ViewBag.CurrentGroupId, 
+        currentSubjectId = ViewBag.CurrentSubjectId, 
+        currentControlTypeId = ViewBag.CurrentControlTypeId}))
+
+<p>@ViewBag.CurrentFilter</p>
+

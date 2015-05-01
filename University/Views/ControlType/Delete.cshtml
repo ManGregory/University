@@ -1,0 +1,27 @@
+﻿@model University.Models.ControlType
+
+@{
+    ViewBag.Title = "Видалення виду контролю";
+}
+
+<h2>Видалення виду контролю</h2>
+
+
+
+<h3>Ви впевненні, що хочете видалити цей запис?</h3>
+<fieldset>
+    <legend>Вид контролю</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+     <h7>   @Html.DisplayFor(model => model.Name)</h7>
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Видалити" /> |
+        @Html.ActionLink("До видів контролю", "Index")
+    </p>
+}

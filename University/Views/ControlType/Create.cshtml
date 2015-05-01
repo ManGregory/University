@@ -1,0 +1,38 @@
+﻿@model University.Models.ControlType
+
+@{
+    ViewBag.Title = "Додати новий вид контролю";
+}
+
+<h2>Додати новий вид контролю</h2>
+
+</br></br></br>
+<div style="float: right; margin: 0 1em 1em 0;"><img src="../Images/orderedList5.png"></div>
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Вид контролю</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <p>
+            <input type="submit" value="Додати" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("До видів контролю", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+</br></br>

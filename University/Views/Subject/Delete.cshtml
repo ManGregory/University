@@ -1,0 +1,24 @@
+﻿@model University.Models.Subject
+
+@{
+    ViewBag.Title = "Видалення дисципліни";
+}
+
+<h2>Видалення дисципліни</h2>
+<h3>Ви дійсно хочете видалити дисципліну?</h3>
+<fieldset>
+    <legend>Дисципліна</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+      <h7>  @Html.DisplayFor(model => model.Name)</h7>
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Видалити" /> |
+        @Html.ActionLink("До списку дисциплін", "Index")
+    </p>
+}
