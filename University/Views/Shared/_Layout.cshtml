@@ -22,25 +22,22 @@
                     </section>
                     <nav>
                         <ul id="menu">
-                            <li>@Html.ActionLink("Домашня сторінка", "Index", "Home")</li>
-                            <li>@Html.ActionLink("Оцінки", "Index", "Journal")</li>       
-                            @if (User.Identity.Name == "admin")
+                            <li>@Html.ActionLink("Домашня сторінка", "Index", "Home")</li>                            
+                            @if (Request.IsAuthenticated)
                             {
-                                <li>@Html.ActionLink("Дисципліни", "Index", "Subject")</li>
+                                <li>@Html.ActionLink("Оцінки", "Index", "Journal")</li> 
+                                <li>@Html.ActionLink("Дисципліни", "Index", "Subject")</li>                                   
+                                <li>@Html.ActionLink("Викладачі", "Index", "Teacher")</li>   
                             }
-                            @if (User.Identity.Name == "admin")
-                            {
-                                <li>@Html.ActionLink("Викладачі", "Index", "Teacher")</li>
-                            }
-                            @if (User.Identity.Name == "admin")
+                            @if (User.IsInRole("admin"))
                             {
                                 <li>@Html.ActionLink("Студенти", "Index", "Student")</li>
                             }
-                            @if (User.Identity.Name == "admin")
+                            @if (User.IsInRole("admin"))
                             {
                                 <li>@Html.ActionLink("Групи", "Index", "Group")</li>
                             }
-                            @if ((User.Identity.Name == "admin") || (User.Identity.Name == "teacher"))
+                            @if ((User.IsInRole("admin")) || (User.IsInRole("teacher")))
                             {
                                 <li>@Html.ActionLink("Види контролю", "Index", "ControlType")</li>
                             }

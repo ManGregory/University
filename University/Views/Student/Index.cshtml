@@ -39,6 +39,9 @@
         <th>
             Група
         </th>
+        <th>
+            Логін
+        </th>
         <th></th>
     </tr>
 
@@ -72,7 +75,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Group.Specialization)
             </td>
-
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.UserProfile.UserName)
+            </td>
 
 
             <td>

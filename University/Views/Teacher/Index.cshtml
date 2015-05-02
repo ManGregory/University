@@ -9,7 +9,10 @@
 
  
 <p>
-    @Html.ActionLink("Додати нового", "Create")
+    @if (User.IsInRole("admin"))
+    {
+        @Html.ActionLink("Додати нового", "Create")
+    }    
 </p>
 <table>
     <tr>
@@ -31,11 +34,16 @@
         <th>
             @Html.DisplayNameFor(model => model.TelephoneVikl)
         </th>
+        @if (User.IsInRole("admin"))
+        {
+            <th>
+                Логін
+            </th>
 
-        <th>
+            <th>
 
-        </th>
-
+            </th>
+        }
 
     </tr>
 
@@ -60,16 +68,20 @@
         <td>
             @Html.DisplayFor(modelItem => item.TelephoneVikl)
         </td>
+        @if (User.IsInRole("admin"))
+        {
+            <td>
+                @Html.DisplayFor(modelItem => item.UserProfile.UserName)
+            </td>
 
 
 
-
-
-        <td>
-            @Html.ActionLink("Редагувати", "Edit", new { id=item.TeacherId }) |
-            @Html.ActionLink("Переглянути", "Details", new { id=item.TeacherId }) |
-            @Html.ActionLink("Видалити", "Delete", new { id=item.TeacherId })
-        </td>
+            <td>
+                @Html.ActionLink("Редагувати", "Edit", new {id = item.TeacherId}) |
+                @Html.ActionLink("Переглянути", "Details", new {id = item.TeacherId}) |
+                @Html.ActionLink("Видалити", "Delete", new {id = item.TeacherId})
+            </td>
+        }
     </tr>
 }
   

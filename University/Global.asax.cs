@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using University.Filters;
 using University.Models;
 
 namespace University
@@ -25,6 +26,7 @@ namespace University
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+            InitializeSimpleMembershipAttribute.SimpleMembershipInitializer.InitUserDatabaseConnection();
             Database.SetInitializer(new UniversityContextInitializer());
         }
     }

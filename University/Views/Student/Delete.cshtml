@@ -8,29 +8,28 @@
 
 
 
-<h3>Ви впевненні що хочете видалити цей запис?</h3>
+<h3>При видалені студента будуть також видалені усі його оцінки в журналі успішності. <br />
+Ви впевненні що хочете видалити цей запис?</h3>
 <fieldset> 
     <legend>Студент</legend>
-     <ol> </br> </br></br>
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.RecordBookNumber)
-    </br> 
-    </div>
-    <div class="display-field">
-     <h7>   @Html.DisplayFor(model => model.RecordBookNumber)</h7>
-    </br> 
-    </div>
+     <ol>
+        <div class="display-label">
+             @Html.DisplayNameFor(model => model.RecordBookNumber)
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Name)
-    </br> </br>
-    </div>
-    <div class="display-field">
-     <h7>   @Html.DisplayFor(model => model.Name)</h7>
-    </div>
+        </div>
+        <div class="display-field">
+         <h6>   @Html.DisplayFor(model => model.RecordBookNumber)</h6>
 
-    </br> </br></br>
-  </ol>
+        </div>
+
+        <div class="display-label">
+             @Html.DisplayNameFor(model => model.Name)
+
+        </div>
+        <div class="display-field">
+         <h7>   @Html.DisplayFor(model => model.Name)</h7>
+        </div>
+     </ol>
 </fieldset>
     
 @using (Html.BeginForm()) {
@@ -39,4 +38,3 @@
         @Html.ActionLink("До списку студентів", "Index")
     </p>
 }
- 

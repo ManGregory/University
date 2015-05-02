@@ -9,7 +9,7 @@ using University.Models;
 
 namespace University.Controllers
 {
-    [Authorize(Users = "admin")]
+    [Authorize(Roles = "admin, teacher, student")]
     public class TeacherController : Controller
     {
         private UsersContext db = new UsersContext();
@@ -19,7 +19,7 @@ namespace University.Controllers
 
         public ActionResult Index()
         {
-            return View(db.Teachers.ToList());
+            return View(db.Teachers.Include(t => t.UserProfile).ToList());
         }
 
         //
@@ -37,7 +37,7 @@ namespace University.Controllers
 
         //
         // GET: /Teacher/Create
-
+        [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
             return View();
@@ -45,13 +45,23 @@ namespace University.Controllers
 
         //
         // POST: /Teacher/Create
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public ActionResult Create(Teacher teacher)
         {
+            var teacherDup = db.Teachers.FirstOrDefault(
+                t => (t.AdrV == teacher.AdrV) && (t.DataV == teacher.DataV) && (t.Name == teacher.Name) &&
+                     (t.Zvaniya == teacher.Zvaniya));
+            if (teacherDup != null)
+            {
+                ModelState.AddModelError("", "Вже існує");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Teachers.Add(teacher);
+                db.SaveChanges();
+                Teacher.AddTeacherToUserDatabase(teacher);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -61,7 +71,7 @@ namespace University.Controllers
 
         //
         // GET: /Teacher/Edit/5
-
+        [Authorize(Roles = "admin")]
         public ActionResult Edit(int id = 0)
         {
             Teacher teacher = db.Teachers.Find(id);
@@ -74,7 +84,7 @@ namespace University.Controllers
 
         //
         // POST: /Teacher/Edit/5
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public ActionResult Edit(Teacher teacher)
         {
@@ -89,7 +99,7 @@ namespace University.Controllers
 
         //
         // GET: /Teacher/Delete/5
-
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(int id = 0)
         {
             Teacher teacher = db.Teachers.Find(id);
@@ -102,7 +112,7 @@ namespace University.Controllers
 
         //
         // POST: /Teacher/Delete/5
-
+        [Authorize(Roles = "admin")]
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {

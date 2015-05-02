@@ -5,11 +5,12 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using University.Models;
 
 namespace University.Controllers
 {
-    [Authorize(Users = "admin, teacher")]
+    [Authorize(Roles = "admin, teacher")]
     public class ControlTypeController : Controller
     {
         private UsersContext db = new UsersContext();
@@ -49,6 +50,11 @@ namespace University.Controllers
         [HttpPost]
         public ActionResult Create(ControlType controltype)
         {
+            var controlTypeDup = db.ControlTypes.FirstOrDefault(c => c.Name == controltype.Name);
+            if (controlTypeDup != null)
+            {
+                ModelState.AddModelError("Name", "Вже існує");
+            }
             if (ModelState.IsValid)
             {
                 db.ControlTypes.Add(controltype);

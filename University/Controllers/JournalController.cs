@@ -12,6 +12,7 @@ using University.Models;
 
 namespace University.Controllers
 {
+    [Authorize]
     public class JournalController : Controller
     {
         private UsersContext db = new UsersContext();
@@ -23,15 +24,33 @@ namespace University.Controllers
             ViewBag.Students = student == null
                 ? new SelectList(db.Students, "StudentId", "Name")
                 : new SelectList(db.Students, "StudentId", "Name", student.StudentId);
-            ViewBag.Subjects = subject == null
-                ? new SelectList(db.Subjects, "SubjectId", "Name")
-                : new SelectList(db.Subjects, "SubjectId", "Name", subject.SubjectId);
+            SetSubjectsToBag(subject);
             ViewBag.ControlTypes = controlType == null
                 ? new SelectList(db.ControlTypes, "ControlTypeId", "Name")
                 : new SelectList(db.ControlTypes, "ControlTypeId", "Name", controlType.ControlTypeId);
             ViewBag.Groups = groupId == null
                 ? new SelectList(db.Groups, "GroupId", "Specialization")
                 : new SelectList(db.Groups, "GroupId", "Specialization", groupId);
+        }
+
+        private void SetSubjectsToBag(Subject subject)
+        {
+            var subjects = db.Subjects.ToList();
+            if (User.IsInRole("teacher"))
+            {
+                var teacher = GetCurrentTeacher();
+                subjects = subjects.Where(s => teacher != null && s.TeacherId == teacher.TeacherId).ToList();
+            }
+            ViewBag.Subjects = subject == null
+                ? new SelectList(subjects, "SubjectId", "Name")
+                : new SelectList(subjects, "SubjectId", "Name", subject.SubjectId);
+        }
+
+        private Teacher GetCurrentTeacher()
+        {
+            var teacher = db.Teachers.Include(t => t.UserProfile)
+                .FirstOrDefault(t => t.UserProfile.UserName == User.Identity.Name);
+            return teacher;
         }
 
         //
@@ -41,7 +60,9 @@ namespace University.Controllers
             int? currentGroupId, int? currentSubjectId, int? currentControlTypeId, string studentName,
             string currentStudentName)
         {
-            var journal = db.Journals.Include(j => j.Student)
+            var journal = db.Journals
+                .Include(j => j.Student)
+                .Include(j => j.Student.UserProfile)
                 .Include(j => j.Subject)
                 .Include(j => j.ControlType)
                 .Include(j => j.Student.Group);
@@ -53,6 +74,11 @@ namespace University.Controllers
             subjectId = subjectId ?? currentSubjectId;
             controlTypeId = controlTypeId ?? currentControlTypeId;
             studentName = studentName ?? currentStudentName;
+            if (User.IsInRole("student"))
+            {
+                var student = db.Students.FirstOrDefault(s => s.UserProfile.UserName == User.Identity.Name);
+                studentName = student != null ? student.Name : studentName;
+            }
             ViewBag.CurrentGroupId = groupId;
             ViewBag.CurrentSubjectId = subjectId;
             ViewBag.CurrentControlTypeId = controlTypeId;
@@ -78,6 +104,11 @@ namespace University.Controllers
                 db.ControlTypes.FirstOrDefault(c => c.ControlTypeId == currentControlTypeId),
                 currentGroupId,
                 currentStudentName);
+            if (User.IsInRole("teacher"))
+            {
+                var teacher = GetCurrentTeacher();
+                journal = journal.Where(j => j.Subject.TeacherId == teacher.TeacherId);
+            }
             return View(journal.OrderBy(j => j.Student.RecordBookNumber)
                 .ThenBy(j => j.Subject.Name)
                 .ThenBy(j => j.ControlType.Name)
@@ -100,7 +131,7 @@ namespace University.Controllers
 
         //
         // GET: /Journal/Create
-        [Authorize(Users = "admin, teacher")]
+        [Authorize(Roles = "admin, teacher")]
         public ActionResult Create()
         {
             SetViewBag();
@@ -110,7 +141,7 @@ namespace University.Controllers
         //
         // POST: /Journal/Create
 
-        [Authorize(Users = "admin, teacher")]
+        [Authorize(Roles = "admin, teacher")]
         [HttpPost]
         public ActionResult Create(Journal journal, int? page = null)
         {
@@ -126,7 +157,7 @@ namespace University.Controllers
 
         //
         // GET: /Journal/Edit/5
-        [Authorize(Users = "admin, teacher")]
+        [Authorize(Roles = "admin, teacher")]
         public ActionResult Edit(int id = 0)
         {
             Journal journal = db.Journals.Find(id);
@@ -140,7 +171,7 @@ namespace University.Controllers
 
         //
         // POST: /Journal/Edit/5
-        [Authorize(Users = "admin, teacher")]
+        [Authorize(Roles = "admin, teacher")]
         [HttpPost]
         public ActionResult Edit(Journal journal, int? page = null)
         {
@@ -156,7 +187,7 @@ namespace University.Controllers
 
         //
         // GET: /Journal/Delete/5
-        [Authorize(Users = "admin, teacher")]
+        [Authorize(Roles = "admin, teacher")]
         public ActionResult Delete(int id = 0)
         {
             Journal journal = db.Journals.Find(id);
@@ -169,7 +200,7 @@ namespace University.Controllers
 
         //
         // POST: /Journal/Delete/5
-        [Authorize(Users = "admin, teacher")]
+        [Authorize(Roles = "admin, teacher")]
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id, int? page = null)
         {

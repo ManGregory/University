@@ -10,7 +10,7 @@
 <h2>Журнал успішності студентів</h2>
 
 <p>
-    @if ((User.Identity.Name == "admin") || (User.Identity.Name == "teacher"))
+    @if (User.IsInRole("admin")|| User.IsInRole("teacher"))
     {
         @Html.ActionLink("Додати нову оцінку", "Create", new {page = Model.PageNumber} )
     }
@@ -21,7 +21,15 @@
             Дисципліна: @Html.DropDownList("SubjectId", ViewBag.Subjects as SelectList, string.Empty)    
             Вид контролю: @Html.DropDownList("ControlTypeId", ViewBag.ControlTypes as SelectList, string.Empty)
             <br />
-            ПІБ студента: @Html.TextBox("studentName", ViewBag.CurrentStudentName as string) 
+            ПІБ студента: 
+            @if (User.IsInRole("student"))
+            {
+                @Html.TextBox("studentName", ViewBag.CurrentStudentName as string, new {@disabled = "disabled"})
+            }
+            else
+            {
+                @Html.TextBox("studentName", ViewBag.CurrentStudentName as string)    
+            }            
             <input type="submit" value="Пошук" />
         </p>
     }
@@ -49,7 +57,10 @@
         <th>
             Група
         </th>
-        <th></th>
+        @if (User.IsInRole("admin") || User.IsInRole("teacher"))
+        {
+            <th></th>   
+        }        
     </tr>
 
 @foreach (var item in Model) {
@@ -75,11 +86,14 @@
         <td>
             @Html.DisplayFor(modelItem => item.Student.Group.Specialization)
         </td>
-        <td>
-            @Html.ActionLink("Редагувати", "Edit", new { id=item.JournalId, page = Model.PageNumber }) |
-            @Html.ActionLink("Переглянути", "Details", new { id=item.JournalId, page = Model.PageNumber }) |
-            @Html.ActionLink("Видалити", "Delete", new { id=item.JournalId, page = Model.PageNumber })
-        </td>
+        @if (User.IsInRole("admin") || User.IsInRole("teacher"))
+        {
+            <td>
+                @Html.ActionLink("Редагувати", "Edit", new { id=item.JournalId, page = Model.PageNumber }) |
+                @Html.ActionLink("Переглянути", "Details", new { id=item.JournalId, page = Model.PageNumber }) |
+                @Html.ActionLink("Видалити", "Delete", new { id=item.JournalId, page = Model.PageNumber })
+            </td>
+        }   
     </tr>
 }
 

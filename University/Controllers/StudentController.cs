@@ -10,7 +10,7 @@ using University.Models;
 
 namespace University.Controllers
 {
-    [Authorize(Users = "admin")]
+    [Authorize(Roles = "admin")]
     public class StudentController : Controller
     {
         private UsersContext db = new UsersContext();
@@ -28,7 +28,10 @@ namespace University.Controllers
 
         public ActionResult Index(int? page)
         {
-            return View(db.Students.Include(s => s.Group).OrderBy(s => s.RecordBookNumber).ToPagedList((page ?? 1), _pageSize));
+            return View(db.Students
+                .Include(s => s.Group)
+                .Include(s => s.UserProfile)
+                .OrderBy(s => s.RecordBookNumber).ToPagedList((page ?? 1), _pageSize));
         }
 
         //
@@ -59,9 +62,19 @@ namespace University.Controllers
         [HttpPost]
         public ActionResult Create(Student student)
         {
+            var studentDup = db.Students.FirstOrDefault(
+                s => (s.AdrS == student.AdrS) && (s.DataS == student.DataS) && (s.GroupId == student.GroupId) &&
+                     (s.Name == student.Name) && (s.RecordBookNumber == student.RecordBookNumber) &&
+                     (s.Rik == student.Rik));
+            if (studentDup != null)
+            {
+                ModelState.AddModelError("", "Вже існує");
+            }
             if (ModelState.IsValid)
             {
                 db.Students.Add(student);
+                db.SaveChanges();
+                Student.AddStudentToUserDatabase(student);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

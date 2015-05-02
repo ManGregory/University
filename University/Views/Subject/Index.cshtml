@@ -8,7 +8,10 @@
 <h2>Дисципліни</h2>
 
 <p>
-    @Html.ActionLink("Додати нову", "Create")
+    @if (User.IsInRole("admin"))
+    {
+        @Html.ActionLink("Додати нову", "Create")
+    }
 </p>
 <table>
     <tr>
@@ -18,7 +21,10 @@
         <th>
             @Html.DisplayNameFor(model => model.Teacher.Name)
         </th>
-        <th></th>
+        @if (User.IsInRole("admin"))
+        {
+            <th></th>   
+        }        
     </tr>
 
 @foreach (var item in Model) {
@@ -29,11 +35,14 @@
         <td>
             @Html.DisplayFor(modelItem => item.Teacher.Name)
         </td>
-        <td>
-            @Html.ActionLink("Редагувати", "Edit", new { id=item.SubjectId }) |
-            @Html.ActionLink("Переглянути", "Details", new { id=item.SubjectId }) |
-            @Html.ActionLink("Видалити", "Delete", new { id=item.SubjectId })
-        </td>
+        @if (User.IsInRole("admin"))
+        {
+            <td>
+                @Html.ActionLink("Редагувати", "Edit", new { id=item.SubjectId }) |
+                @Html.ActionLink("Переглянути", "Details", new { id=item.SubjectId }) |
+                @Html.ActionLink("Видалити", "Delete", new { id=item.SubjectId })
+            </td>
+        } 
     </tr>
 }
 

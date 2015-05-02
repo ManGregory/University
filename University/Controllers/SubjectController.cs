@@ -9,7 +9,7 @@ using University.Models;
 
 namespace University.Controllers
 {
-    [Authorize(Users = "admin")]
+    [Authorize(Roles = "admin, teacher, student")]
     public class SubjectController : Controller
     {
         private UsersContext db = new UsersContext();
@@ -44,7 +44,7 @@ namespace University.Controllers
 
         //
         // GET: /Subject/Create
-
+        [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
             SetViewBag();
@@ -54,9 +54,16 @@ namespace University.Controllers
         //
         // POST: /Subject/Create
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public ActionResult Create(Subject subject)
         {
+            var subjectDup = db.Subjects.FirstOrDefault(s => (s.Name == subject.Name) && (s.TeacherId == subject.TeacherId));
+            if (subjectDup != null)
+            {
+                ModelState.AddModelError("Name", "Вже існує");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Subjects.Add(subject);
@@ -69,7 +76,7 @@ namespace University.Controllers
 
         //
         // GET: /Subject/Edit/5
-
+        [Authorize(Roles = "admin")]
         public ActionResult Edit(int id = 0)
         {
             Subject subject = db.Subjects.Find(id);
@@ -84,6 +91,7 @@ namespace University.Controllers
         //
         // POST: /Subject/Edit/5
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public ActionResult Edit(Subject subject)
         {
@@ -99,7 +107,7 @@ namespace University.Controllers
 
         //
         // GET: /Subject/Delete/5
-
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(int id = 0)
         {
             Subject subject = db.Subjects.Find(id);
@@ -112,7 +120,7 @@ namespace University.Controllers
 
         //
         // POST: /Subject/Delete/5
-
+        [Authorize(Roles = "admin")]
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {

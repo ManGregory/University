@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Web.Mvc;
+using System.Web.Security;
+using University.Filters;
+using WebMatrix.WebData;
 
 namespace University.Models
 {
@@ -201,8 +204,8 @@ namespace University.Models
                 teacher.AdrV = CreateRandomAddress();
                 teacher.DataV = RandomDay().ToShortDateString();
                 teacher.TelephoneVikl = CreateRandomPhone();
-                teacher.Zvaniya = CreateRandomTeacherDegree();
-                context.Teachers.Add(teacher);
+                teacher.Zvaniya = CreateRandomTeacherDegree();                
+                context.Teachers.Add(teacher);                
             }
             foreach (var subject in subjects)
             {
@@ -214,7 +217,7 @@ namespace University.Models
                 student.DataS = RandomDay().ToShortDateString();
                 student.AdrS = CreateRandomAddress();
                 student.TelephoneSt = CreateRandomPhone();
-                context.Students.Add(student);
+                context.Students.Add(student);                                               
             }
             context.SaveChanges();
 
@@ -229,6 +232,15 @@ namespace University.Models
                     SubjectId = subjects[r.Next(0, subjects.Count)].SubjectId
                 };
                 context.Journals.Add(journal);
+            }
+            context.SaveChanges();
+            foreach (var student in students)
+            {
+                Student.AddStudentToUserDatabase(student);   
+            }
+            foreach (var teacher in teachers)
+            {
+                Teacher.AddTeacherToUserDatabase(teacher);
             }
             context.SaveChanges();
         }
@@ -290,6 +302,23 @@ namespace University.Models
 
         [DisplayName("Контактний телефон")]
         public string TelephoneSt { get; set; }
+
+        public int? UserId { get; set; }
+        [ForeignKey("UserId")]
+        public UserProfile UserProfile { get; set; }
+
+        public static void AddStudentToUserDatabase(Student student)
+        {
+            InitializeSimpleMembershipAttribute.SimpleMembershipInitializer.InitUserDatabaseConnection();
+            var userName = string.Format("student{0}", student.StudentId);
+            WebSecurity.CreateUserAndAccount(userName, student.RecordBookNumber.ToString());
+            student.UserId = WebSecurity.GetUserId(userName);
+            if (!Roles.RoleExists("student"))
+            {
+                Roles.CreateRole("student");
+            }
+            Roles.AddUserToRole(userName, "student");
+        }
     }
 
     [Table("Teacher")]
@@ -318,6 +347,22 @@ namespace University.Models
         [DisplayName("Контактний телефон")]
         public string TelephoneVikl { get; set; }
 
+        public int? UserId { get; set; }
+        [ForeignKey("UserId")]
+        public UserProfile UserProfile { get; set; }
+
+        public static void AddTeacherToUserDatabase(Teacher teacher)
+        {
+            InitializeSimpleMembershipAttribute.SimpleMembershipInitializer.InitUserDatabaseConnection();
+            var userName = string.Format("teacher{0}", teacher.TeacherId);
+            WebSecurity.CreateUserAndAccount(userName, userName);
+            teacher.UserId = WebSecurity.GetUserId(userName);
+            if (!Roles.RoleExists("teacher"))
+            {
+                Roles.CreateRole("teacher");
+            }
+            Roles.AddUserToRole(userName, "teacher");
+        }
     }
 
     [Table("Subject")]

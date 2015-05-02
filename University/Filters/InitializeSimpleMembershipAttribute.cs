@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Web.Mvc;
+using System.Web.Security;
 using WebMatrix.WebData;
 using University.Models;
 
@@ -21,7 +22,7 @@ namespace University.Filters
             LazyInitializer.EnsureInitialized(ref _initializer, ref _isInitialized, ref _initializerLock);
         }
 
-        private class SimpleMembershipInitializer
+        public class SimpleMembershipInitializer
         {
             public SimpleMembershipInitializer()
             {
@@ -37,22 +38,38 @@ namespace University.Filters
                             ((IObjectContextAdapter)context).ObjectContext.CreateDatabase();
                         }
                     }
-
                   //  WebSecurity.InitializeDatabaseConnection("RemoteConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
-                    WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
-                    
-                    if (!WebSecurity.UserExists("admin"))
+                    InitUserDatabaseConnection();
+                    if (!Roles.RoleExists("admin"))
                     {
-                        WebSecurity.CreateUserAndAccount("admin", "admin");
+                        Roles.CreateRole("admin");
+                        if (!WebSecurity.UserExists("admin"))
+                        {
+                            WebSecurity.CreateUserAndAccount("admin", "admin");
+                            Roles.AddUserToRole("admin", "admin");
+                        }
                     }
-                    if (!WebSecurity.UserExists("teacher"))
+                    if (!Roles.RoleExists("teacher"))
                     {
-                        WebSecurity.CreateUserAndAccount("teacher", "teacher");
+                        Roles.CreateRole("teacher");
+                    }
+                    if (!Roles.RoleExists("student"))
+                    {
+                        Roles.CreateRole("student");
                     }
                 }
                 catch (Exception ex)
                 {
                     throw new InvalidOperationException("The ASP.NET Simple Membership database could not be initialized. For more information, please see http://go.microsoft.com/fwlink/?LinkId=256588", ex);
+                }
+            }
+
+            public static void InitUserDatabaseConnection()
+            {
+                if (!WebSecurity.Initialized)
+                {
+                    WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName",
+                        autoCreateTables: true);
                 }
             }
         }

@@ -9,7 +9,7 @@ using University.Models;
 
 namespace University.Controllers
 {
-    [Authorize(Users = "admin")]
+    [Authorize(Roles = "admin")]
     public class GroupController : Controller
     {
         private UsersContext db = new UsersContext();
@@ -48,6 +48,12 @@ namespace University.Controllers
         [HttpPost]
         public ActionResult Create(Group group)
         {
+            var groupDup = db.Groups.FirstOrDefault(g => g.Specialization == group.Specialization);
+            if (groupDup != null)
+            {
+                ModelState.AddModelError("Specialization", "Вже існує");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Groups.Add(group);
