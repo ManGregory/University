@@ -63,12 +63,16 @@ namespace University.Controllers
         public ActionResult Create(Student student)
         {
             var studentDup = db.Students.FirstOrDefault(
-                s => (s.AdrS == student.AdrS) && (s.DataS == student.DataS) && (s.GroupId == student.GroupId) &&
-                     (s.Name == student.Name) && (s.RecordBookNumber == student.RecordBookNumber) &&
+                s => (s.AdrS == student.AdrS.Trim()) && (s.DataS == student.DataS) && (s.GroupId == student.GroupId) &&
+                     (s.Name == student.Name.Trim()) && (s.RecordBookNumber == student.RecordBookNumber) &&
                      (s.Rik == student.Rik));
             if (studentDup != null)
             {
                 ModelState.AddModelError("", "Вже існує");
+            }
+            if (string.IsNullOrWhiteSpace(student.Name))
+            {
+                ModelState.AddModelError("Name", "Необхідно ввести ПІБ студента");
             }
             if (ModelState.IsValid)
             {
@@ -102,6 +106,10 @@ namespace University.Controllers
         [HttpPost]
         public ActionResult Edit(Student student)
         {
+            if (string.IsNullOrWhiteSpace(student.Name))
+            {
+                ModelState.AddModelError("Name", "Необхідно ввести ПІБ студента");
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(student).State = EntityState.Modified;

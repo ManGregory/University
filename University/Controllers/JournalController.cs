@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Razor.Generator;
 using System.Web.Routing;
 using PagedList;
 using University.Models;
@@ -19,7 +20,7 @@ namespace University.Controllers
         private int _pageSize = 10;
 
         private void SetViewBag(Student student = null, Subject subject = null, 
-            ControlType controlType = null, int? groupId = null, string studentName = null)
+            ControlType controlType = null, int? groupId = null, string mark = null)
         {
             ViewBag.Students = student == null
                 ? new SelectList(db.Students, "StudentId", "Name")
@@ -31,6 +32,9 @@ namespace University.Controllers
             ViewBag.Groups = groupId == null
                 ? new SelectList(db.Groups, "GroupId", "Specialization")
                 : new SelectList(db.Groups, "GroupId", "Specialization", groupId);
+            ViewBag.Marks = mark == null
+                ? new SelectList(Enumerable.Range(1, 100))
+                : new SelectList(Enumerable.Range(1, 100), mark);
         }
 
         private void SetSubjectsToBag(Subject subject)
@@ -102,8 +106,7 @@ namespace University.Controllers
             SetViewBag(null,
                 db.Subjects.FirstOrDefault(s => s.SubjectId == currentSubjectId),
                 db.ControlTypes.FirstOrDefault(c => c.ControlTypeId == currentControlTypeId),
-                currentGroupId,
-                currentStudentName);
+                currentGroupId);
             if (User.IsInRole("teacher"))
             {
                 var teacher = GetCurrentTeacher();
@@ -165,7 +168,7 @@ namespace University.Controllers
             {
                 return HttpNotFound();
             }
-            SetViewBag(journal.Student, journal.Subject, journal.ControlType);
+            SetViewBag(journal.Student, journal.Subject, journal.ControlType, mark: journal.Mark);
             return View(journal);
         }
 
@@ -181,7 +184,7 @@ namespace University.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index", new {page});
             }
-            SetViewBag(journal.Student, journal.Subject, journal.ControlType);
+            SetViewBag(journal.Student, journal.Subject, journal.ControlType, mark : journal.Mark);
             return View(journal);
         }
 

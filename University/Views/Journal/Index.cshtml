@@ -37,6 +37,9 @@
 <table>
     <tr>
         <th>
+            Дата складання
+        </th>
+        <th>
             Номер залікової
         </th>        
         <th>
@@ -65,6 +68,9 @@
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.Student.RecordBookNumber)
         </td>        

@@ -20,14 +20,15 @@ namespace University
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+            Database.SetInitializer<UsersContext>(new UniversityContextInitializer());
+            UsersContext context = new UsersContext();
+            context.Journals.ToList();
             InitializeSimpleMembershipAttribute.SimpleMembershipInitializer.InitUserDatabaseConnection();
-            Database.SetInitializer(new UniversityContextInitializer());
         }
     }
 }

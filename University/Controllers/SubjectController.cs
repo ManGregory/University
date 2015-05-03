@@ -58,12 +58,15 @@ namespace University.Controllers
         [HttpPost]
         public ActionResult Create(Subject subject)
         {
-            var subjectDup = db.Subjects.FirstOrDefault(s => (s.Name == subject.Name) && (s.TeacherId == subject.TeacherId));
+            var subjectDup = db.Subjects.FirstOrDefault(s => (s.Name == subject.Name.Trim()) && (s.TeacherId == subject.TeacherId));
             if (subjectDup != null)
             {
                 ModelState.AddModelError("Name", "Вже існує");
             }
-
+            if (string.IsNullOrWhiteSpace(subject.Name))
+            {
+                ModelState.AddModelError("Name", "Необхідно ввести назву дисципліни");
+            }
             if (ModelState.IsValid)
             {
                 db.Subjects.Add(subject);
@@ -95,6 +98,10 @@ namespace University.Controllers
         [HttpPost]
         public ActionResult Edit(Subject subject)
         {
+            if (string.IsNullOrWhiteSpace(subject.Name))
+            {
+                ModelState.AddModelError("Name", "Необхідно ввести назву дисципліни");
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(subject).State = EntityState.Modified;

@@ -25,9 +25,7 @@ namespace University.Filters
         public class SimpleMembershipInitializer
         {
             public SimpleMembershipInitializer()
-            {
-                Database.SetInitializer<UsersContext>(new UniversityContextInitializer());
-
+            {                
                 try
                 {
                     using (var context = new UsersContext())
@@ -37,25 +35,6 @@ namespace University.Filters
                             // Create the SimpleMembership database without Entity Framework migration schema
                             ((IObjectContextAdapter)context).ObjectContext.CreateDatabase();
                         }
-                    }
-                  //  WebSecurity.InitializeDatabaseConnection("RemoteConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
-                    InitUserDatabaseConnection();
-                    if (!Roles.RoleExists("admin"))
-                    {
-                        Roles.CreateRole("admin");
-                        if (!WebSecurity.UserExists("admin"))
-                        {
-                            WebSecurity.CreateUserAndAccount("admin", "admin");
-                            Roles.AddUserToRole("admin", "admin");
-                        }
-                    }
-                    if (!Roles.RoleExists("teacher"))
-                    {
-                        Roles.CreateRole("teacher");
-                    }
-                    if (!Roles.RoleExists("student"))
-                    {
-                        Roles.CreateRole("student");
                     }
                 }
                 catch (Exception ex)

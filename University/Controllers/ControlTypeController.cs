@@ -50,10 +50,14 @@ namespace University.Controllers
         [HttpPost]
         public ActionResult Create(ControlType controltype)
         {
-            var controlTypeDup = db.ControlTypes.FirstOrDefault(c => c.Name == controltype.Name);
+            var controlTypeDup = db.ControlTypes.FirstOrDefault(c => c.Name == controltype.Name.Trim());
             if (controlTypeDup != null)
             {
                 ModelState.AddModelError("Name", "Вже існує");
+            }
+            if (string.IsNullOrWhiteSpace(controltype.Name))
+            {
+                ModelState.AddModelError("Name", "Необхідно ввести назву");
             }
             if (ModelState.IsValid)
             {

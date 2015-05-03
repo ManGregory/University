@@ -101,17 +101,37 @@ namespace University.Models
             return degrees[r.Next(degrees.Count)];
         }
 
-        private DateTime RandomDay()
+        private DateTime RandomDay(int fromYear = 1980, int toYear = 1990)
         {
-            var start = new DateTime(1980, 1, 1);
+            var start = new DateTime(fromYear, 1, 1);
 
-            var range = (new DateTime(1990, 1, 1) - start).Days;
+            var range = (new DateTime(toYear, 1, 1) - start).Days;
             return start.AddDays(r.Next(range));
         }
 
         protected override void Seed(UsersContext context)
         {
             base.Seed(context);
+
+            InitializeSimpleMembershipAttribute.SimpleMembershipInitializer.InitUserDatabaseConnection();
+            if (!Roles.RoleExists("admin"))
+            {
+                Roles.CreateRole("admin");
+                if (!WebSecurity.UserExists("admin"))
+                {
+                    WebSecurity.CreateUserAndAccount("admin", "admin");
+                    Roles.AddUserToRole("admin", "admin");
+                }
+            }
+            if (!Roles.RoleExists("teacher"))
+            {
+                Roles.CreateRole("teacher");
+            }
+            if (!Roles.RoleExists("student"))
+            {
+                Roles.CreateRole("student");
+            }
+
             var controlTypes = new List<ControlType>
             {
                 new ControlType {Name = "Лабораторна робота 1"},
@@ -226,8 +246,8 @@ namespace University.Models
                 var journal = new Journal
                 {
                     ControlTypeId = controlTypes[r.Next(0, controlTypes.Count)].ControlTypeId,
-                    Mark = r.Next(1, 5).ToString(),
-                    Name = "Журнал",
+                    Mark = r.Next(1, 100).ToString(),
+                    Date = RandomDay(2014, 2015).ToShortDateString(),
                     StudentId = students[r.Next(0, students.Count)].StudentId,
                     SubjectId = subjects[r.Next(0, subjects.Count)].SubjectId
                 };
@@ -300,6 +320,7 @@ namespace University.Models
         [DisplayName("Адреса проживання")]
         public string AdrS { get; set; }
 
+        [Required]
         [DisplayName("Контактний телефон")]
         public string TelephoneSt { get; set; }
 
@@ -344,6 +365,7 @@ namespace University.Models
         [DisplayName("Адреса проживання")]
         public string AdrV { get; set; }
 
+        [Required]
         [DisplayName("Контактний телефон")]
         public string TelephoneVikl { get; set; }
 
@@ -402,8 +424,10 @@ namespace University.Models
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int JournalId { get; set; }
-        [DisplayName("Найменування")]
-        public string Name { get; set; }
+
+        [Required]
+        [DisplayName("Дата складання")]
+        public string Date { get; set; }
         [DisplayName("Оцінка")]
         [Required]
         public string Mark { get; set; }

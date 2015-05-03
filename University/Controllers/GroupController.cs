@@ -48,12 +48,15 @@ namespace University.Controllers
         [HttpPost]
         public ActionResult Create(Group group)
         {
-            var groupDup = db.Groups.FirstOrDefault(g => g.Specialization == group.Specialization);
+            var groupDup = db.Groups.FirstOrDefault(g => g.Specialization == group.Specialization.Trim());
             if (groupDup != null)
             {
                 ModelState.AddModelError("Specialization", "Вже існує");
             }
-
+            if (string.IsNullOrWhiteSpace(group.Specialization))
+            {
+                ModelState.AddModelError("Specialization", "Необхідно ввести спеціалізацію");
+            }
             if (ModelState.IsValid)
             {
                 db.Groups.Add(group);
@@ -83,6 +86,10 @@ namespace University.Controllers
         [HttpPost]
         public ActionResult Edit(Group group)
         {
+            if (string.IsNullOrWhiteSpace(group.Specialization))
+            {
+                ModelState.AddModelError("Specialization", "Необхідно ввести спеціалізацію");
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(group).State = EntityState.Modified;
