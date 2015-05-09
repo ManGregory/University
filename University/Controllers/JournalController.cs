@@ -23,8 +23,8 @@ namespace University.Controllers
             ControlType controlType = null, int? groupId = null, string mark = null)
         {
             ViewBag.Students = student == null
-                ? new SelectList(db.Students, "StudentId", "Name")
-                : new SelectList(db.Students, "StudentId", "Name", student.StudentId);
+                ? new SelectList(db.Students.OrderBy(s => s.Name), "StudentId", "Name")
+                : new SelectList(db.Students.OrderBy(s => s.Name), "StudentId", "Name", student.StudentId);
             SetSubjectsToBag(subject);
             ViewBag.ControlTypes = controlType == null
                 ? new SelectList(db.ControlTypes, "ControlTypeId", "Name")
